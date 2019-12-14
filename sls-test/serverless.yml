@@ -1,0 +1,19 @@
+service: sls-test
+
+provider:
+  name: aws
+  runtime: provided
+  region: eu-central-1
+
+functions:
+  hello:
+    handler: HelloWorld.handle
+    layers:
+	    # run
+      #   aws cloudformation describe-stack-resources --stack-name elixir-example | \
+      #     python -c 'import os, sys, json; print(list(filter(lambda r: r["ResourceType"] == "AWS::Lambda::LayerVersion", json.load(sys.stdin)["StackResources"]))[0]["PhysicalResourceId"])'
+      # to get the arn of the currently deployed elixir-runtime layer
+      - arn:aws:lambda:eu-central-1:260336115275:layer:elixir-runtime:2
+
+package:
+  artifact: _build/production/artifact.zip
